@@ -1,9 +1,9 @@
 ---
 toc: true
 layout: post
-description: 
+description: Installing and customization of the Huion 950p graphic tablet.
 categories: [markdown]
-title: Installing the Huion 950p graphic tablet in Linux
+title: Huion 950p graphic tablet in Linux
 ---
 
 All these were tested on Ubuntu 20.04 but the distro shouldn't make a big 
