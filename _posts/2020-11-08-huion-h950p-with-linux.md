@@ -1,4 +1,10 @@
-# Installing the Huion 950p graphic tablet in Linux
+---
+toc: true
+layout: post
+description: 
+categories: [markdown]
+title: Installing the Huion 950p graphic tablet in Linux
+---
 
 All these were tested on Ubuntu 20.04 but the distro shouldn't make a big 
 difference here.
