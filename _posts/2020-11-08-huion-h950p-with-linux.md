@@ -3,11 +3,13 @@ toc: true
 layout: post
 description: Installing and customization of the Huion 950p graphic tablet.
 categories: [markdown]
-title: Huion 950p graphic tablet in Linux
+title: Using the Huion 950p graphic tablet in Linux
 ---
 
-All these were tested on Ubuntu 20.04 but the distro shouldn't make a big 
-difference here.
+The [Huion 950p](https://www.huion.com/pen_tablet/Inspiroy/H950P.html) graphic tablet is a reasonably priced graphic tablet for PCs and phones. 
+It doesn't support Linux by default but it's quite simple to make it work with it. 
+
+**NB*: This was only test on Ubuntu 20.04 but the distro shouldn't really matter.
 
 ## Recognizing the pad
 When plugged for the first time, the stylo is recognized out of the box, but the buttons are not.
