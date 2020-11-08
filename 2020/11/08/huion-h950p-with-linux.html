@@ -1,0 +1,107 @@
+<h1 id="installing-the-huion-950p-graphic-tablet-in-linux">Installing the Huion 950p graphic tablet in Linux</h1>
+
+<p>All these were tested on Ubuntu 20.04 but the distro shouldn’t make a big 
+difference here.</p>
+
+<h2 id="recognizing-the-pad">Recognizing the pad</h2>
+<p>When plugged for the first time, the stylo is recognized out of the box, but the buttons are not.</p>
+
+<p>Following <a href="https://askubuntu.com/questions/1000869/how-to-run-the-new-huion-tablets-on-linux?#tab-top">this SO answer</a>, 
+you can create <code class="language-plaintext highlighter-rouge">/usr/share/X11/xorg.conf.d/99-huion950P.conf</code> with the following content:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Section "InputClass"
+    Identifier "Huion tablets with Wacom driver"
+    MatchUSBID "256c:006d*"
+    MatchIsTablet "true"
+    MatchDevicePath "/dev/input/event*"
+    Driver "wacom"
+EndSection
+</code></pre></div></div>
+
+<p>You can then restart (or restart the x server only), and <a href="https://www.wacom.com/en-us">wacom</a> 
+recognizes both the stylo and the pad. 
+To list the recognized devices, you can run <code class="language-plaintext highlighter-rouge">xsetwacom --list</code>. Your output should look like this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HID 256c:006d Pen stylus        	id: 12	type: STYLUS    
+HID 256c:006d Pad pad           	id: 13	type: PAD    
+</code></pre></div></div>
+
+<h2 id="customizing-things">Customizing things</h2>
+
+<p>From there, <code class="language-plaintext highlighter-rouge">xsetwacom</code> can be used to customize the buttons, which display you’re drawing on etc..</p>
+
+<h3 id="exploring-xsetwacom">Exploring <code class="language-plaintext highlighter-rouge">xsetwacom</code></h3>
+<p>Let’s first see what <code class="language-plaintext highlighter-rouge">xsetwacom</code> can be used for:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>xsetwacom <span class="nt">--help</span>
+Options:
+ <span class="nt">-h</span>, <span class="nt">--help</span>                 - usage
+ <span class="nt">-v</span>, <span class="nt">--verbose</span>              - verbose output
+ <span class="nt">-V</span>, <span class="nt">--version</span>              - version info
+ <span class="nt">-d</span>, <span class="nt">--display</span> <span class="s2">"display"</span>    - override default display
+ <span class="nt">-s</span>, <span class="nt">--shell</span>                - generate shell commands <span class="k">for</span> <span class="s1">'get'</span>
+ <span class="nt">-x</span>, <span class="nt">--xconf</span>                - generate xorg.conf lines <span class="k">for</span> <span class="s1">'get'</span>
+
+Commands:
+ <span class="nt">--list</span> devices             - display detected devices
+ <span class="nt">--list</span> parameters          - display supported parameters
+ <span class="nt">--list</span> modifiers           - display supported modifier and specific keys <span class="k">for </span>keystrokes
+ <span class="nt">--set</span> <span class="s2">"device name"</span> parameter <span class="o">[</span>values...] - <span class="nb">set </span>device parameter by name
+ <span class="nt">--get</span> <span class="s2">"device name"</span> parameter <span class="o">[</span>param...]  - get current device parameter<span class="o">(</span>s<span class="o">)</span> value by name
+</code></pre></div></div>
+
+<p>What kind of parameters can we access/change? (partial output).</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>xsetwacom <span class="nt">--list</span> parameters
+Area             - Valid tablet area <span class="k">in </span>device coordinates. 
+Button           - X11 event to which the given button should be mapped.
+Rotate           - Sets the rotation of the tablet. Values <span class="o">=</span> none, cw, ccw, half <span class="o">(</span>default is none<span class="o">)</span><span class="nb">.</span> 
+ResetArea        - Resets the bounding coordinates to default <span class="k">in </span>tablet units. 
+MapToOutput      - Map the device to the given output. 
+all              - Get value <span class="k">for </span>all parameters. 
+</code></pre></div></div>
+
+<p>We can then <code class="language-plaintext highlighter-rouge">--get</code> and <code class="language-plaintext highlighter-rouge">--set</code> those parameters, using the device name. 
+The device name can eiter be the name, or the device ID.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>xsetwacom <span class="nt">--get</span> 12 all
+...
+<span class="nv">$ </span>xsetwacom <span class="nt">--get</span> 13 all
+...
+</code></pre></div></div>
+
+<h3 id="setting-buttons">Setting buttons</h3>
+
+<p>Considering the buttons are on the left of the device, starting from the top the 
+buttons of the pad are numbered: 1, 2, 3, 8, 9, 10, 12 (not clear why).</p>
+
+<p>You can set the button using <code class="language-plaintext highlighter-rouge">xsetwacom</code> again, have a look at the <a href="https://www.systutorials.com/docs/linux/man/1-xsetwacom/"><code class="language-plaintext highlighter-rouge">man</code> page</a>
+and the <strong>Button</strong> section.</p>
+<blockquote>
+  <p>The “key” keyword is followed by a list of key names. These can optionally be preceded by “+” for press and “-“ for release. If +/- is not given, press-and-release is assumed, except for modifier keys which are left pressed. Key names can be X11 KeySyms or some aliases such as ‘shift’ or ‘f1’ (the full list can be seen with the list modifiers command).</p>
+
+  <p>To assign a key that is not in the modifiers list, use the KeySym in /usr/include/X11/keysymdef.h with the XK_ prefix removed or its actual value as is. For example, XK_BackSpace should be specified as “BackSpace”. “0xff80” can also be used to replace “BackSpace” since it’s the unique KeySym value of Backspace key.</p>
+
+  <p>Here is a combined example: “key +a shift b shift -a 0xff0d” converts the button into a series of keystrokes. In this example, “press a, press shift, press and release b, release shift, release a, then press and release enter”. “key +a +shift b -shift -a 0xff0d” does the same thing.</p>
+</blockquote>
+
+<p>To open a terminal (CTRL+ALT+T), for example <code class="language-plaintext highlighter-rouge">xsetwacom --set "HID 256c:006d Pad pad" Button 1 "key +ctrl +alt t -ctrl -alt"</code></p>
+
+<p>Buttons for the stylo:</p>
+<ul>
+  <li><strong>Button 1</strong>: When the stylo touches the pad.</li>
+  <li><strong>Button 2</strong>: Bottom button.</li>
+  <li><strong>Button 3</strong>: Top button.</li>
+</ul>
+
+<h3 id="handling-multiple-monitors">Handling multiple monitors</h3>
+<p>To list connected monitor, use <code class="language-plaintext highlighter-rouge">xrandr</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>xrandr | <span class="nb">grep</span> <span class="o">[</span>^dis]connected
+eDP-1 connected <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span>
+HDMI-1 connected primary 1920x1080+0+0 <span class="o">(</span>normal left inverted right x axis y axis<span class="o">)</span> 598mm x 336mm
+</code></pre></div></div>
+
+<p>To lock the pad to the external screen, use this</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xsetwacom <span class="nb">set</span> <span class="s2">"HID 256c:006e Pen stylus"</span> MapToOutput HDMI-1
+</code></pre></div></div>
+
+<p>Other parameters can be modified such as <code class="language-plaintext highlighter-rouge">Area</code> to draw on a smaller piece of your screen, 
+<code class="language-plaintext highlighter-rouge">Rotate</code> to handle portrait as well as landscape etc…</p>

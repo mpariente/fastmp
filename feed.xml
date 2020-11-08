@@ -1,4 +1,110 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://mpariente.github.io/fastmp/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mpariente.github.io/fastmp/" rel="alternate" type="text/html" /><updated>2020-11-08T07:53:31-06:00</updated><id>https://mpariente.github.io/fastmp/feed.xml</id><title type="html">fastpages</title><subtitle>An easy to use blogging platform with support for Jupyter Notebooks.</subtitle><entry><title type="html">Fastpages Notebook Blog Post</title><link href="https://mpariente.github.io/fastmp/jupyter/2020/02/20/test.html" rel="alternate" type="text/html" title="Fastpages Notebook Blog Post" /><published>2020-02-20T00:00:00-06:00</published><updated>2020-02-20T00:00:00-06:00</updated><id>https://mpariente.github.io/fastmp/jupyter/2020/02/20/test</id><content type="html" xml:base="https://mpariente.github.io/fastmp/jupyter/2020/02/20/test.html">&lt;!--
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://mpariente.github.io/fastmp/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mpariente.github.io/fastmp/" rel="alternate" type="text/html" /><updated>2020-11-08T07:55:56-06:00</updated><id>https://mpariente.github.io/fastmp/feed.xml</id><title type="html">fastpages</title><subtitle>An easy to use blogging platform with support for Jupyter Notebooks.</subtitle><entry><title type="html">Huion H950p With Linux</title><link href="https://mpariente.github.io/fastmp/2020/11/08/huion-h950p-with-linux.html" rel="alternate" type="text/html" title="Huion H950p With Linux" /><published>2020-11-08T00:00:00-06:00</published><updated>2020-11-08T00:00:00-06:00</updated><id>https://mpariente.github.io/fastmp/2020/11/08/huion-h950p-with-linux</id><content type="html" xml:base="https://mpariente.github.io/fastmp/2020/11/08/huion-h950p-with-linux.html">&lt;h1 id=&quot;installing-the-huion-950p-graphic-tablet-in-linux&quot;&gt;Installing the Huion 950p graphic tablet in Linux&lt;/h1&gt;
+
+&lt;p&gt;All these were tested on Ubuntu 20.04 but the distro shouldn’t make a big 
+difference here.&lt;/p&gt;
+
+&lt;h2 id=&quot;recognizing-the-pad&quot;&gt;Recognizing the pad&lt;/h2&gt;
+&lt;p&gt;When plugged for the first time, the stylo is recognized out of the box, but the buttons are not.&lt;/p&gt;
+
+&lt;p&gt;Following &lt;a href=&quot;https://askubuntu.com/questions/1000869/how-to-run-the-new-huion-tablets-on-linux?#tab-top&quot;&gt;this SO answer&lt;/a&gt;, 
+you can create &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/share/X11/xorg.conf.d/99-huion950P.conf&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Section &quot;InputClass&quot;
+    Identifier &quot;Huion tablets with Wacom driver&quot;
+    MatchUSBID &quot;256c:006d*&quot;
+    MatchIsTablet &quot;true&quot;
+    MatchDevicePath &quot;/dev/input/event*&quot;
+    Driver &quot;wacom&quot;
+EndSection
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can then restart (or restart the x server only), and &lt;a href=&quot;https://www.wacom.com/en-us&quot;&gt;wacom&lt;/a&gt; 
+recognizes both the stylo and the pad. 
+To list the recognized devices, you can run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xsetwacom --list&lt;/code&gt;. Your output should look like this:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HID 256c:006d Pen stylus        	id: 12	type: STYLUS    
+HID 256c:006d Pad pad           	id: 13	type: PAD    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;customizing-things&quot;&gt;Customizing things&lt;/h2&gt;
+
+&lt;p&gt;From there, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xsetwacom&lt;/code&gt; can be used to customize the buttons, which display you’re drawing on etc..&lt;/p&gt;
+
+&lt;h3 id=&quot;exploring-xsetwacom&quot;&gt;Exploring &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xsetwacom&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Let’s first see what &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xsetwacom&lt;/code&gt; can be used for:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;xsetwacom &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;
+Options:
+ &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;                 - usage
+ &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--verbose&lt;/span&gt;              - verbose output
+ &lt;span class=&quot;nt&quot;&gt;-V&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;              - version info
+ &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--display&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;display&quot;&lt;/span&gt;    - override default display
+ &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--shell&lt;/span&gt;                - generate shell commands &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--xconf&lt;/span&gt;                - generate xorg.conf lines &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'get'&lt;/span&gt;
+
+Commands:
+ &lt;span class=&quot;nt&quot;&gt;--list&lt;/span&gt; devices             - display detected devices
+ &lt;span class=&quot;nt&quot;&gt;--list&lt;/span&gt; parameters          - display supported parameters
+ &lt;span class=&quot;nt&quot;&gt;--list&lt;/span&gt; modifiers           - display supported modifier and specific keys &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;keystrokes
+ &lt;span class=&quot;nt&quot;&gt;--set&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;device name&quot;&lt;/span&gt; parameter &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;values...] - &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;device parameter by name
+ &lt;span class=&quot;nt&quot;&gt;--get&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;device name&quot;&lt;/span&gt; parameter &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;param...]  - get current device parameter&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; value by name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;What kind of parameters can we access/change? (partial output).&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;xsetwacom &lt;span class=&quot;nt&quot;&gt;--list&lt;/span&gt; parameters
+Area             - Valid tablet area &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;device coordinates. 
+Button           - X11 event to which the given button should be mapped.
+Rotate           - Sets the rotation of the tablet. Values &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; none, cw, ccw, half &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;default is none&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; 
+ResetArea        - Resets the bounding coordinates to default &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;tablet units. 
+MapToOutput      - Map the device to the given output. 
+all              - Get value &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;all parameters. 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--get&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--set&lt;/code&gt; those parameters, using the device name. 
+The device name can eiter be the name, or the device ID.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;xsetwacom &lt;span class=&quot;nt&quot;&gt;--get&lt;/span&gt; 12 all
+...
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;xsetwacom &lt;span class=&quot;nt&quot;&gt;--get&lt;/span&gt; 13 all
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;setting-buttons&quot;&gt;Setting buttons&lt;/h3&gt;
+
+&lt;p&gt;Considering the buttons are on the left of the device, starting from the top the 
+buttons of the pad are numbered: 1, 2, 3, 8, 9, 10, 12 (not clear why).&lt;/p&gt;
+
+&lt;p&gt;You can set the button using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xsetwacom&lt;/code&gt; again, have a look at the &lt;a href=&quot;https://www.systutorials.com/docs/linux/man/1-xsetwacom/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;man&lt;/code&gt; page&lt;/a&gt;
+and the &lt;strong&gt;Button&lt;/strong&gt; section.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The “key” keyword is followed by a list of key names. These can optionally be preceded by “+” for press and “-“ for release. If +/- is not given, press-and-release is assumed, except for modifier keys which are left pressed. Key names can be X11 KeySyms or some aliases such as ‘shift’ or ‘f1’ (the full list can be seen with the list modifiers command).&lt;/p&gt;
+
+  &lt;p&gt;To assign a key that is not in the modifiers list, use the KeySym in /usr/include/X11/keysymdef.h with the XK_ prefix removed or its actual value as is. For example, XK_BackSpace should be specified as “BackSpace”. “0xff80” can also be used to replace “BackSpace” since it’s the unique KeySym value of Backspace key.&lt;/p&gt;
+
+  &lt;p&gt;Here is a combined example: “key +a shift b shift -a 0xff0d” converts the button into a series of keystrokes. In this example, “press a, press shift, press and release b, release shift, release a, then press and release enter”. “key +a +shift b -shift -a 0xff0d” does the same thing.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To open a terminal (CTRL+ALT+T), for example &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xsetwacom --set &quot;HID 256c:006d Pad pad&quot; Button 1 &quot;key +ctrl +alt t -ctrl -alt&quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Buttons for the stylo:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Button 1&lt;/strong&gt;: When the stylo touches the pad.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Button 2&lt;/strong&gt;: Bottom button.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Button 3&lt;/strong&gt;: Top button.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;handling-multiple-monitors&quot;&gt;Handling multiple monitors&lt;/h3&gt;
+&lt;p&gt;To list connected monitor, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xrandr&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;xrandr | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;^dis]connected
+eDP-1 connected &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;normal left inverted right x axis y axis&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+HDMI-1 connected primary 1920x1080+0+0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;normal left inverted right x axis y axis&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 598mm x 336mm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To lock the pad to the external screen, use this&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;xsetwacom &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;HID 256c:006e Pen stylus&quot;&lt;/span&gt; MapToOutput HDMI-1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Other parameters can be modified such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Area&lt;/code&gt; to draw on a smaller piece of your screen, 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rotate&lt;/code&gt; to handle portrait as well as landscape etc…&lt;/p&gt;</content><author><name></name></author><summary type="html">Installing the Huion 950p graphic tablet in Linux</summary></entry><entry><title type="html">Fastpages Notebook Blog Post</title><link href="https://mpariente.github.io/fastmp/jupyter/2020/02/20/test.html" rel="alternate" type="text/html" title="Fastpages Notebook Blog Post" /><published>2020-02-20T00:00:00-06:00</published><updated>2020-02-20T00:00:00-06:00</updated><id>https://mpariente.github.io/fastmp/jupyter/2020/02/20/test</id><content type="html" xml:base="https://mpariente.github.io/fastmp/jupyter/2020/02/20/test.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
