@@ -1,0 +1,1 @@
+Sitemap: https://mpariente.github.io/fastmp/sitemap.xml
